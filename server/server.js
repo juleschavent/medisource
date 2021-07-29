@@ -7,15 +7,15 @@ app.use(cors())
 app.use(express.json())
 
 const db = mysql.createConnection({
-    user: 'root',
+    user: 'bofv3727_julesadmin',
     host: 'localhost',
-    password: '',
-    database: 'medisource',
+    password: '#1!i&05U7$k@',
+    database: 'bofv3727_medisource',
 });
 
 // GET QUERY
 // get systeme list
-app.get('/systeme', (req,res) => {
+app.get('/systeme', (req, res) => {
     db.query('SELECT * FROM systeme', (err, result) => {
         if (err) {
             console.log(err)
@@ -81,23 +81,50 @@ app.get('/traitement/:systeme/:organe/:maladie', (req, res) => {
 })
 
 //INSERT QUERY
-// app.post('/create', (req, res) => {
-//     const name = req.body.*name of my var from frontend*
-//     const age = req.body.*name of my var from frontend*
-//     const country = req.body.*name of my var from frontend*
-//     etc..
+//insert systeme
+app.post('/addSysteme', (req, res) => {
+    const name = req.body.name
+    const desc = req.body.description
 
-//     db.query('INSERT INTO people (name, age, country) VALUES (?,?,?)',          //utiliser une requête SQL
-//     [name, age, country], 
-//     (err, result) => {
-//         if (err) {
-//             console.log(err)
-//         } else {
-//             res.send('Values inserted')
-//         }
-//     }
-// );
-// })
+    db.query('INSERT INTO systeme (name_systeme, desc_systeme) VALUES (?,?)',
+        [name, desc],
+        (err, result) => {
+            if (err) {
+                console.log(err)
+            } else {
+                res.send('Values inserted')
+            }
+        }
+    );
+})
+
+//UPDATE QUERY
+//update systeme
+app.put('/updateSysteme', (req, res) => {
+    const id = req.body.id;
+    const name = req.body.name;
+    const desc = req.body.desc;
+    db.query('UPDATE systeme SET name_systeme = ?, desc_systeme = ? WHERE id_systeme = ?', [name, desc, id], (err, result) => {
+        if (err) {
+            console.log(err)
+        } else {
+            res.send(result);
+        }
+    })
+})
+
+//DELETE QUERY
+//delete systeme
+app.delete('/deleteSysteme/:index', (req, res) => {
+    const id = req.params.index;
+    db.query('DELETE FROM systeme WHERE id_systeme = ?', id, (err, result) => {
+        if (err) {
+            console.log(err)
+        } else {
+            res.send(result)
+        }
+    })
+})
 
 app.listen(3001, () => {
     console.log('Server is running on port 3001')
