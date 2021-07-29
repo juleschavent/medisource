@@ -33,7 +33,6 @@ app.get('/organe/:systeme', (req, res) => {
             console.log(err)
         } else {
             res.send(result);
-            // console.log(systeme)
         }
     })
 })
@@ -49,10 +48,8 @@ app.get('/maladie/:systeme/:organe', (req, res) => {
     WHERE name_systeme = ? AND name_organe = ?`, [systeme, organe], (err, result) => {
         if (err) {
             console.log(err)
-            console.log(systeme)
         } else {
             res.send(result);
-            console.log(systeme)
         }
     })
 })
@@ -72,10 +69,8 @@ app.get('/traitement/:systeme/:organe/:maladie', (req, res) => {
     WHERE name_systeme = ? AND name_organe = ? AND name_maladie = ?`, [systeme, organe, maladie], (err, result) => {
         if (err) {
             console.log(err)
-            console.log(systeme)
         } else {
             res.send(result);
-            console.log(systeme)
         }
     })
 })
@@ -101,9 +96,9 @@ app.post('/addSysteme', (req, res) => {
 //UPDATE QUERY
 //update systeme
 app.put('/updateSysteme', (req, res) => {
-    const id = req.body.id;
-    const name = req.body.name;
-    const desc = req.body.desc;
+    const id = req.body.index;
+    const name = req.body.newName;
+    const desc = req.body.newDesc;
     db.query('UPDATE systeme SET name_systeme = ?, desc_systeme = ? WHERE id_systeme = ?', [name, desc, id], (err, result) => {
         if (err) {
             console.log(err)
