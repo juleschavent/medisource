@@ -93,6 +93,24 @@ app.post('/addSysteme', (req, res) => {
     );
 })
 
+//insert organe
+app.post('/addOrgane', (req, res) => {
+    const name = req.body.name
+    const desc = req.body.description
+    const id = req.body.idSysteme
+
+    db.query('INSERT INTO organe (name_organe, desc_organe, systeme_id_systeme) VALUES (?,?,?)',
+        [name, desc, id],
+        (err, result) => {
+            if (err) {
+                console.log(err)
+            } else {
+                res.send('Values inserted')
+            }
+        }
+    );
+})
+
 //UPDATE QUERY
 //update systeme
 app.put('/updateSysteme', (req, res) => {
@@ -114,12 +132,32 @@ app.delete('/deleteSysteme/:index', (req, res) => {
     const id = req.params.index;
     db.query('DELETE FROM systeme WHERE id_systeme = ?', id, (err, result) => {
         if (err) {
+            res.send(err)
             console.log(err)
         } else {
             res.send(result)
         }
     })
 })
+
+//delete organe
+app.delete('/deleteOrgane/:index', (req, res) => {
+    const id = req.params.index;
+    db.query('DELETE FROM organe WHERE id_organe = ?', id, (err, result) => {
+        if (err) {
+            res.send(err)
+            console.log(err)
+        } else {
+            res.send(result)
+        }
+    })
+})
+
+
+
+
+
+
 
 app.listen(3001, () => {
     console.log('Server is running on port 3001')

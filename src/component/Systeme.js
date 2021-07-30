@@ -1,9 +1,9 @@
 import Axios from "axios";
 import { useEffect, useState } from "react";
-import AddSysteme from "./AddSysteme";
-import DeleteSysteme from "./DeleteSysteme";
+import AddSysteme from "./SystemeAdd";
+import DeleteSysteme from "./SystemeDelete";
 import Organe from "./Organe";
-import UpdateSysteme from "./UpdateSysteme";
+import UpdateSysteme from "./SystemeUpdate";
 
 const Systeme = () => {
   const [systemeList, setSystemeList] = useState(null);
@@ -16,33 +16,32 @@ const Systeme = () => {
   const [traitement, setTraitement] = useState(null);
 
   const [addSysteme, setAddSysteme] = useState(false);
+  const [editSysteme, setEditSysteme] = useState(false);
   const [deleteSysteme, setDeleteSysteme] = useState(false);
 
-  const [name, setName] = useState('');
-  const [description, setDescription] = useState('');
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
 
   useEffect(() => {
     Axios.get("http://localhost:3001/systeme").then((response) => {
       setSystemeList(response.data);
       console.log("get systeme list", response.data);
     });
-  }, [addSysteme, deleteSysteme]);
+  }, [addSysteme, deleteSysteme, editSysteme, ]);
 
   const handleAdd = (param, setParam) => {
     let tempStatus = !param;
     setParam(tempStatus);
   };
 
-
-
   const handleIsSysteme = (e) => {
     setSysteme(e.target.value);
-    setOrgane('');
-    setOrganeList('');
-    setMaladie('');
-    setMaladieList('');
-    setTraitement('');
-    setTraitementList('');
+    setOrgane("");
+    setOrganeList("");
+    setMaladie("");
+    setMaladieList("");
+    setTraitement("");
+    setTraitementList("");
   };
 
   return (
@@ -61,20 +60,45 @@ const Systeme = () => {
       <button onClick={() => handleAdd(addSysteme, setAddSysteme)}>
         <i className="fas fa-plus-circle"></i>
       </button>
-      {addSysteme ? <AddSysteme name={name} setName={setName} description={description} setDescription={setDescription} setAddSysteme={setAddSysteme} systemeList={systemeList} /> : ""}
+      {addSysteme ? (
+        <AddSysteme
+          name={name}
+          setName={setName}
+          description={description}
+          setDescription={setDescription}
+          setAddSysteme={setAddSysteme}
+          systemeList={systemeList}
+        />
+      ) : (
+        ""
+      )}
       {systeme &&
-        systemeList.map((el, index) => (
-          systeme === el.name_systeme ?
+        systemeList.map((el, index) =>
+          systeme === el.name_systeme ? (
             <div key={index}>
               <p>{el.desc_systeme}</p>
-              <DeleteSysteme index={el.id_systeme} deleteSysteme={deleteSysteme} setDeleteSysteme={setDeleteSysteme} />
-              <UpdateSysteme index={el.id_systeme} name={name} setName={setName} description={description} setDescription={setDescription}/>
+              <DeleteSysteme
+                index={el.id_systeme}
+                deleteSysteme={deleteSysteme}
+                setDeleteSysteme={setDeleteSysteme}
+                systeme={systeme}
+              />
+              <UpdateSysteme
+                index={el.id_systeme}
+                name={el.name_systeme}
+                description={el.desc_systeme}
+                editSysteme={editSysteme}
+                setEditSysteme={setEditSysteme}
+              />
             </div>
-            : ''
-        ))}
+          ) : (
+            ""
+          )
+        )}
       {systeme ? (
         <Organe
           systeme={systeme}
+          systemeList={systemeList}
           organe={organe}
           setOrgane={setOrgane}
           organeList={organeList}
